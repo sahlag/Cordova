@@ -20,6 +20,12 @@
         // listener sur le bouton getPosition
         document.getElementById("getPosition").addEventListener('click', getPosition);
 
+        // listener sur le bouton watchPosition
+        document.getElementById("watchPosition").addEventListener('click', watchPosition);
+
+        // listener sur le bouton clearPosition
+        document.getElementById("clearPosition").addEventListener('click', clearPosition);
+
     };
 
     
@@ -27,25 +33,46 @@
 
     // affiche la position courante par geolocalisation
     function getPosition() {
+        console.log("getPosition");
+
+        navigator.geolocation.getCurrentPosition(onSuccess, onError);
+       
+
+    }
+
+    function watchPosition() {
+        console.log("watchPosition");
+        var option = { maximumAge: 3000, timeout: 5000, enableHighAccuracy: true };
+        var watchID = navigator.geolocation.watchPosition(onSuccess, onError, { timeout: 30000 });
+
+        // reauete de la geolocalisation
+        navigator.geolocation.getCurrentPosition(onSuccess, onError);
+    }
+
+    function clearPosition() {
+        console.log("clearPosition");
+
         navigator.geolocation.getCurrentPosition(onSuccess, onError);
     }
 
     
     // onSuccess Callback ==> current GPS coodinates = position
     var onSuccess = function (position) {
+        console.log("onSuccess")
         var maPos = 'Latitude: ' + position.coords.latitude + '<br>' +
             'Longitude: ' + position.coords.longitude + '<br>' +
             'Altitude: ' + position.coords.altitude + '<br>' +
             'Accuracy: ' + position.coords.accuracy + '<br>' +
             'Altitude Accuracy: ' + position.coords.altitudeAccuracy;
 
-        document.getElementById("result").innerHTML = "<p>" + maPos + "</p>";
+        document.getElementById("result").innerHTML += "<p>" + maPos + "</p>";
     };
 
     // onError Callback receives a PositionError object
     //
     function onError(error) {
-        document.getElementById("result").innerHTML = 'code: ' + error.code +
+        console.log("onError")
+        document.getElementById("error").innerHTML = 'code: ' + error.code +
             ' message: ' + error.message;
     }
 
