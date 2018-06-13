@@ -4,7 +4,7 @@
 // puis exécutez "window.location.reload()" dans la console JavaScript.
 (function () {
     "use strict";
-
+    var watchID; // id résultat obtenu de le méthode watchposition pour clearposition
     document.addEventListener( 'deviceready', onDeviceReady.bind( this ), false );
 
     function onDeviceReady() {
@@ -42,17 +42,16 @@
 
     function watchPosition() {
         console.log("watchPosition");
-        var option = { maximumAge: 3000, timeout: 5000, enableHighAccuracy: true };
-        var watchID = navigator.geolocation.watchPosition(onSuccess, onError, { timeout: 30000 });
+        var option = { maximumAge: 3000, timeout: 5000, enableHighAccuracy: false };
+        watchID = navigator.geolocation.watchPosition(onSuccess, onError, { timeout: 30000 });
 
         // reauete de la geolocalisation
         navigator.geolocation.getCurrentPosition(onSuccess, onError);
     }
 
     function clearPosition() {
-        console.log("clearPosition");
-
-        navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        console.log("clearPosition" + watchID);
+        navigator.geolocation.clearWatch(watchID);
     }
 
     
